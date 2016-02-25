@@ -86,6 +86,10 @@ class Global {
 		var p= str.lastIndexOf(".");
 		return str.substring(p+1) ;
 	}
+	public function is (v:String) :Bool  return what==v ;
+	public function whatIs (v:Dynamic) :String  return className(v) ;
+	public var what(get, null):String; function get_what () :String return className(this) ;
+	
 	/**
 	 * <br/><b>v</b> dynamic value.
 	 * <br/><b>return</b> true or false.

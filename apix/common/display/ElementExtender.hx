@@ -234,6 +234,17 @@ class ElementExtender  {
 		return arrReturnElements;
 	}
 	*/
+	
+	
+	public static function objClsName (el:Element):String {
+		if (el == null) { trace ("f::Element is null !"); }
+		var v = "";
+		untyped __js__ ("v=el.constructor.name");
+		if (v == null) untyped __js__ (" v=  Object.prototype.toString.call(el).slice(8, -1)  ") ;
+		//
+		return v ;
+	}
+		
 	public static function child (el:Element, v:String):Element {
 		var ret:Element = null; var child:Element = null;
 		for (i in el.children) {
@@ -422,8 +433,16 @@ class ElementExtender  {
 	}
 	public inline static function pick(el:Element) { 		
 		if (el == null) { trace ("f::Element is null !"); }	
-		if (!(Std.is(el,InputElement) || Std.is(el,TextAreaElement) )){ trace ("f::Element have'nt Input type !"); }	
+		if (!isInputField(el)) { trace ("f::Element isn't an input field !"); }	
 		untyped el.select(); 
+	}
+	static function isInputField(el:Element) : Bool { 	
+		return
+		(	objClsName(el) == "HTMLTextAreaElement" || 	
+			objClsName(el) == "HTMLInputElement" ||
+			Std.is(el,InputElement) || 	
+			Std.is(el, TextAreaElement)
+		) 	;		
 	}
 	
 	/**
