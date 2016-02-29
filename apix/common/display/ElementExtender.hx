@@ -421,8 +421,8 @@ class ElementExtender  {
 		}
 	}
 	//
-	public inline static function isDisplay(el:Element) :Bool { 		
-		return ( Global.get().strVal(el.style.display,"block") != "none" ) ; 
+	public inline static function isDisplay(el:Element) :Bool { 	
+		return (!( Global.get().strVal(el.style.display,"none") == "none") ); 
 	}
 	public inline static function getDisplay(el:Element):String { 		
 		return ( Global.get().strVal(el.style.display,"") ) ; 

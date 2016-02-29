@@ -156,10 +156,10 @@ class Global {
 	}
 	/**
 	 * Call js alert()
-	 * <br/><b>v</b> Message.
+	 * <br/><b>v</b> Message.?cb:Dynamic, ?titleLabel:String,?validLabel:String) {	
 	 */
-	public function alert( v : Dynamic,?cb:Dynamic,?title ) : Void {
-		if (Global.alertFunction != null) Global.alertFunction(v,cb,title);
+	public function alert( v : Dynamic,?cb:Dynamic,?title:String,?validLabel:String ) : Void {
+		if (Global.alertFunction != null) Global.alertFunction(v,cb,title,validLabel);
 		else {
 			if (strVal(title,"") != "") v = title + "\n"+v ;
 			untyped __js__("alert")(js.Boot.__string_rec(v, ""));
@@ -369,7 +369,11 @@ class Global {
 	 */
 	public function open(url:String,?lab:String="",?opt:String) {	 
 		Common.open(url, lab, opt);
-	}			
+	}	
+	public function replace(url:String) {	 
+		untyped __js__ ("window.location.replace(url)");
+	}	
+	
 	/**
 	 * <b>return</b> an rgb() format
 	 * <br/><b>v</b> a #hexa format

@@ -27,6 +27,8 @@ package apix.common.util ;
 
 @:native("cst") extern class Cst {
     public static var LANGUAGE_SRC:String;
+    public static var LANGUAGE_PATH:String;
+    public static var LANGUAGE_FILE:String;
     public static var MODEL_SRC:String ;	
     public static var BASE_URL:String ;	
 	public static var SERVER_URL:String ;
