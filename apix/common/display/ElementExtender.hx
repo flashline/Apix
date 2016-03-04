@@ -880,7 +880,7 @@ class ElementExtender  {
 		} ;
 	}	
 	public static function clearEnterKeyToClick (el:Element) {	
-		Browser.window.onkeypress = null ;
+		Browser.window.onkeypress = null ;		
 	}	
 	/**
 	 * call examples :

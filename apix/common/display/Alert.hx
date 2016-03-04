@@ -12,6 +12,8 @@ using apix.common.display.ElementExtender;
 class Alert  {
 	var validElem (default,null) :Elem;
 	var ctnrElem:Elem;
+	var defTitleLabel:String;
+	var defValidLabel:String;
 	var titleElem:Elem;
 	var textElem:Elem;
 	var callBack :Void->Void;
@@ -32,8 +34,10 @@ class Alert  {
 		textElem = txElem;
 		validElem = bElem;
 		//
-		titleElem.inner(tTx);
-		validElem.inner(vTx);
+		defTitleLabel=tTx;
+		defValidLabel = vTx;
+		//titleElem.inner(tTx);
+		//validElem.inner(vTx);
 		//
 		enable();
     }	
@@ -80,8 +84,8 @@ class Alert  {
 			}
 		}
 		if (Global.get().strVal(v,"")=="") v = "Alert.display() : Programming error in assign message ! May be dont use 'lang' object";
-		if (titleLabel!=null) titleElem.inner(titleLabel);
-		if (validLabel!=null) validElem.inner(validLabel);
+		if (titleLabel != null) titleElem.inner(titleLabel); else titleElem.inner(defTitleLabel) ;
+		if (validLabel!=null) validElem.inner(validLabel); else validElem.inner(defValidLabel) ;
 		callBack = cb;
 		ctnrElem.show();
 		ctnrElem.visible(true);

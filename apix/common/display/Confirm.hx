@@ -12,6 +12,8 @@ using apix.common.display.ElementExtender;
 class Confirm extends Alert  {
 	var cancelElem (default,null) :Elem;
 	var confirmCallBack :Bool->Confirm->Void;
+	var defCancelLabel:String;
+	
 	public static var _instance:Confirm;
 	/**
 	 * constructor
@@ -25,7 +27,8 @@ class Confirm extends Alert  {
 	
 	public function new (el:Elem,txElem:Elem,bvElem:Elem,bcElem:Elem,tEl:Elem,?tTx:String="Confirm ?",?vTx:String="Yes",?cTx:String="No") {
 		cancelElem = bcElem;
-		cancelElem.inner(cTx);
+		//cancelElem.inner(cTx);
+		defCancelLabel = cTx;
 		super(el, txElem, bvElem, tEl, tTx, vTx);
 		_instance = this;
     }	
@@ -42,11 +45,9 @@ class Confirm extends Alert  {
 			}
 		}
 		
-		
-		
-		if (titleLabel!=null) titleElem.inner(titleLabel);
-		if (validLabel!=null) validElem.inner(validLabel);
-		if (cancelLabel!=null) cancelElem.inner(cancelLabel);
+		if (titleLabel !=null) titleElem.inner(titleLabel); else titleElem.inner(defTitleLabel) ;
+		if (validLabel !=null) validElem.inner(validLabel); else validElem.inner(defValidLabel) ;
+		if (cancelLabel!=null) cancelElem.inner(cancelLabel); else cancelElem.inner(defCancelLabel); 
 		
 		confirmCallBack = cb;
 		ctnrElem.show();
