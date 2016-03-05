@@ -72,7 +72,7 @@ class Alert  {
 		ctnrElem.hide(); 
 		if (callBack != null) {
 			callBack();
-			callBack = null;
+			//callBack = null;
 		}
 	}
     function display (?v:String = "", ?cb:Dynamic, ?titleLabel:String,?validLabel:String) {		
