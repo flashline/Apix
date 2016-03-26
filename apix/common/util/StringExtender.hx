@@ -57,7 +57,7 @@ class StringExtender  {
 	 * @param	?b					use capture true/false
 	 * @param	?parent				event source(s) parent
 	 */
-	public static function off (v:String,type:String, listenerFunction:Dynamic, ?b:Bool = false,?parent:Element=null) {
+	public static function off (v:String,?type:String, ?listenerFunction:Dynamic, ?b:Bool = false,?parent:Element=null) {
 		var arr:Array<Element>;
 		arr = all (v, parent);	
 		for (el in arr) {

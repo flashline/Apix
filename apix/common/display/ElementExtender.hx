@@ -61,6 +61,7 @@ typedef ElemKeyboardEvent = KeyboardEvent; //not used in this class but in other
 typedef ElemMouseEvent = MouseEvent; //not used in this class but in other classes 
 typedef ElemTouchList = TouchList; //not used in this class but in other classes 
 typedef Context2D = CanvasRenderingContext2D; //not used in this class but in other classes 
+
 //
 typedef ElemStyle = { 
 	?textAlign:String,
@@ -90,6 +91,7 @@ abstract CssStyle (String) {
 	var minWidth="minWidth";
 	var minHeight = "minHeight";
 	var backgroundColor = "backgroundColor";
+	var color = "color";
 	var opacity = "opacity";
 	var border = "border";
 	var borderColor = "borderColor";
@@ -204,6 +206,15 @@ class ElementExtender  {
 		var arr = getElemsByTag(el, v);
 		if (arr.length==0) trace("f:: tag '" + v + "' doesn't exist in element with id '"+el.id+"'");
 		return arr[0] ;
+	}
+	public static function setId (el:Element, v:String) :Elem{
+		if (el == null) { trace ("f::Element is null !"); }
+		el.id = v;
+		return el;
+	}
+	public static function getId (el:Element, v:String):String {
+		if (el == null) { trace ("f::Element is null !"); }
+		return el.id;
 	}
 	/*
 	public static function elemByClass (el:Element, v:String):Element {

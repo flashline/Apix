@@ -80,12 +80,8 @@ class Common {
 	public static inline function toClipBoard () :Bool {
 		#if (js)
 			var ret:Bool;
-			try {
-				ret = untyped __js__ ("document.execCommand('copy') ") ;				
-			}
-			catch (err:String) {
-				ret= false;
-			}
+			try  { ret = untyped __js__ ("document.execCommand('copy') ") ; }
+			catch (err:String)  { ret= false; }
 			return  ret;
 		#end
 	}

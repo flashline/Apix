@@ -120,6 +120,28 @@ class MathX {
 		var p:Float = Math.pow(10, d);
 		return Math.floor(n * p) / p;
 	}
+	/**
+	* return value v as min<=v<max
+	*/
+	static inline public function random( min:Float,max:Float):Float {
+		return Math.random() * (max - min) + min;
+	}
+	/**
+	* return value Integer v as min<=v<max
+	*/
+	static inline public function randomInt( min:Int,max:Int):Int {
+		return Math.floor(Math.random() * (max - min)) + min;
+	}
 	
-	
+	static public function randomExclusiveList (len:Int,?arr:Array<Int>=null) :Array<Int> {
+		if (arr == null) arr = [];
+		var r = randomInt(1, len + 1);
+		var ok = true;
+		for (i in arr) {
+			if (r == i) { ok = false; break; }
+		}
+		if (ok) arr.push(r);
+		if (arr.length < len) arr=randomExclusiveList(len, arr);
+		return arr;
+	}
 }
