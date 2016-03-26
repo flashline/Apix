@@ -156,13 +156,13 @@ class XmlParser {
 			if (xml.firstChild().nodeType == Xml.PCData) { 
 				var v = StringTools.trim(xml.firstChild().nodeValue) ;
 				if (!g.empty(v)) {
-					o.set("value", v);
+					o.set("value", g.decodeXmlReserved(v));
 				}
 			}
 		}		
 		//if (xml.nodeType==Xml.Element) { // if bug
 			for (i in xml.attributes()) {			
-				o.set(i, xml.get(i));
+				o.set(i, g.decodeXmlReserved(xml.get(i)));
 			}
 		//}
 		var oo:Object;		

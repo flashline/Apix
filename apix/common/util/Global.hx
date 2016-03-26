@@ -299,6 +299,7 @@ class Global {
 	}
 	*/
 	public function decodeXmlReserved(str:String) :String {
+		// Don't try to replace by &amp; etc... 
 		str = strVal(str, "");
 		if (str!="") {
 			var i:Int=str.indexOf("~#e") ;
@@ -321,9 +322,17 @@ class Global {
 				str=str.substr(0,i)+"%"+str.substr(i+3);
 				i=str.indexOf("~#ç") ;
 			}
+			i=str.indexOf("~#`") ;
+			while (i>-1) {
+				str=str.substr(0,i)+'"'+str.substr(i+3);
+				i=str.indexOf("~#`") ;
+			}
 		}
 		return str ;
 	}
+	/*public function uncodeXmlReserved(str:String) :String {
+		return decodeXmlReserved(str);
+	}*/
 	
 	/**
 	 * @param	os 	source object
