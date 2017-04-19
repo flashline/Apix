@@ -25,4 +25,9 @@ ie: elem.on("click",listener,false,[parameters to myListener]) ;
 - as haxe lib  
 - or add in build.xml :  -cp <path where apix folder is installed>
 
+##Dependency :  
+[Skin : html and css](https://github.com/flashline/html) has to be installed :  
+ 
+
+
 ##Licence  GNU-GPL
