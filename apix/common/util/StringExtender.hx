@@ -154,11 +154,27 @@ class StringExtender  {
 		return msg;
 	}	
 	/**
+	* return  yyyy/mm/dd from dd/mm/yyyy 
+	*/
+	public static function toDataDate(v:String) : String {
+		var s = v.substr(2, 1);
+		return v.substr(6,4)+s+v.substr(3,2)+s+v.substr(0,2);
+	}
+	/**
+	* return dd/mm/yyyy from yyyy/mm/dd
+	*/
+	public static function toDisplayDate(v:String) : String {
+		var s = v.substr(4, 1);
+		return v.substr(8,2)+s+v.substr(5,2)+s+v.substr(0,4);
+	}	
+	/**
 	 * @return true if it's a valid mail
 	 */
 	public inline static function isMail (v:String) : Bool {
 		var r:EReg = ~/[A-Z0-9._%-]+@[A-Z0-9.-]+\.[A-Z][A-Z][A-Z]?/i;
-		return r.match(v);		
+		var b = r.match(v);	
+		if (b) if (v.indexOf("@", v.indexOf("@")+1) != -1) b = false;
+		return b;
     }
 	public inline static function unspaced (v:String):String {
 		return  (v==null)?"":StringTools.rtrim(StringTools.ltrim(v));

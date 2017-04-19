@@ -34,11 +34,11 @@ class HttpExtender  {
 	//
 	public static function getParameter (h:Http, v:String):Object {		
 		var params = new Object();
-		for( p in ~/[&]/g.split(v) ) {
+		for ( p in ~/[&]/g.split(v) ) {
 			var pl = p.split("=");
 			if( pl.length < 2 ) continue;
 			var name = pl.shift();
-			params.set(StringTools.urlDecode(name), StringTools.urlDecode(pl.join("=")));
+			params.set(StringTools.urlDecode(name), pl.join("=")); //StringTools.urlDecode()  
 		}
 		return params;
 	}	

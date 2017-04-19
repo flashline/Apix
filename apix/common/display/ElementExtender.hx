@@ -98,6 +98,7 @@ abstract CssStyle (String) {
 	var borderStyle = "borderStyle";
 	var borderWidth = "borderWidth";
 	var fontSize = "fontSize";
+	var display = "display";
 	/* to continue
 	var maxWidth="";
 	var maxHeight="";
@@ -119,7 +120,8 @@ abstract CssStyle (String) {
 }
 @:enum
 abstract Attrib (String) { 
-	//var name="name";
+	var name = "name";
+	var src = "src" ;
 	// to be continued ..
 }
 
@@ -132,6 +134,8 @@ abstract Attrib (String) {
 	var bottom: Float;
 	var width: Float;
 	var height: Float;
+	var bottomRightX: Float;
+	var bottomRightY: Float;
 	
 }
 typedef DraggableElementInfo = {
@@ -142,14 +146,20 @@ typedef DraggableElementInfo = {
 	var mouseScale:Vector;
 }
 @:enum
-abstract InputType (String) {
+abstract InputType (String) to String {
 	var TEXT="text";
+	var NUMBER="number";
 	var PASSWORD="password";
 	var DATE="date";
 	var EMAIL="email";
 	var FILE="file";
 	var RANGE="range";
 	var URL = "url";
+	var CHECKBOX = "checkbox";
+	var RADIO = "radio";
+	var HIDDEN = "hidden";
+	var COLOR = "color";
+	
 }
 
 typedef Option  = { 
@@ -160,12 +170,11 @@ typedef Option  = {
 typedef Radio  = { 
 	> Option ,	
 	? element:Element ,
-	? labelElement:Element ,
-	
+	? labelElement:Element,
+	? index:Int
 }
 typedef Check  = { 
 	> Radio ,
-	? index:Int
 }
 //
 typedef OptionValue = { public var text : String; public var value : String; public var index : Int;  }
@@ -212,7 +221,7 @@ class ElementExtender  {
 		el.id = v;
 		return el;
 	}
-	public static function getId (el:Element, v:String):String {
+	public static function getId (el:Element):String {
 		if (el == null) { trace ("f::Element is null !"); }
 		return el.id;
 	}
@@ -322,7 +331,7 @@ class ElementExtender  {
 	/**
 	 * remove element itself -used when native js ChildNode.remove() doesn't work !
 	 */
-    public static function  delete (el:Element) :Bool {			
+    public static function delete (el:Element) :Bool {			
 		if ( el.parentNode!=null ) {
 			el.parentNode.removeChild( el );  
 			return true;
@@ -374,7 +383,7 @@ class ElementExtender  {
 	} 	
 	public static function getBoundInfo(el:Element) : ElemBoundInfo{
 		var r = el.getBoundingClientRect();
-		var ebi:ElemBoundInfo = {  pageX:null, pageY:null, left:null, right:null, top:null, bottom:null, width:null, height:null };		
+		var ebi:ElemBoundInfo = {  pageX:null, pageY:null, left:null, right:null, top:null, bottom:null, width:null, height:null,bottomRightX:null,bottomRightY:null };		
 		var v =positionInPage(el);
 		ebi.pageX = v.x;
 		ebi.pageY = v.y;
@@ -384,6 +393,8 @@ class ElementExtender  {
 		ebi.bottom = Math.fround(r.bottom);
 		ebi.width = r.width;
 		ebi.height = r.height;
+		ebi.bottomRightX = v.x+r.width;
+		ebi.bottomRightY = v.y+r.height;
 		return ebi;
 	}
 	public static function getVector(el:Element) :Vector {
@@ -415,21 +426,13 @@ class ElementExtender  {
 	*/
 	public static function hide(el:Element) :String { 		
 		if (el == null) { trace ("f::Element is null !"); }	
-		var before = el.style.display;	
-		if (before != "none" && before != "" && before != null ) {
-			untyped __js__ ("if (el.style.apix_save_display==null) el.style.apix_save_display=before"); 
-		}
-		else before = null;
+		var before = el.style.display;			
 		el.style.display = "none"; 
 		return  before;
 	}
 	public static function show(el:Element,?v:String) { 		
 		if (el == null) { trace ("f::Element is null !"); }	
-		if (!isDisplay(el)) {
-			if (v == null) untyped __js__ ("v=el.style.apix_save_display"); 
-			if (v == null) v = "block";
-			el.style.display = v; 
-		}
+		if (!isDisplay(el) || v!=null) el.style.display = (v==null)?"block":v; 
 	}
 	//
 	public inline static function isDisplay(el:Element) :Bool { 	
@@ -557,6 +560,31 @@ class ElementExtender  {
 		return vy;
 	}
 	/**
+	 * 
+	 * @param	el		this element
+	 * @param	t		target 
+	 * @param	outer	true if outer test ; else it's an inner test 
+	 * @return			true if hit
+	 */
+	public static function hit (el:Element, t:Element, ?outer:Bool = false): Bool { 
+		var match = false;
+		var eBi = getBoundInfo(el);
+		var tBi = getBoundInfo(t);
+		if (!outer) {
+			if (	tBi.pageX>=eBi.pageX &&
+					tBi.bottomRightX<=eBi.bottomRightX &&
+					tBi.pageY>=eBi.pageY &&
+					tBi.bottomRightY <= eBi.bottomRightY ) match = true ;
+		}
+		else {
+			if (    (tBi.pageX>=eBi.pageX && tBi.pageX<=eBi.bottomRightX  ||
+					 tBi.bottomRightX>=eBi.pageX && tBi.bottomRightX<=eBi.bottomRightX) &&
+					(tBi.pageY>=eBi.pageY && tBi.pageY<=eBi.bottomRightY  ||
+					 tBi.bottomRightY>=eBi.pageY && tBi.bottomRightY<=eBi.bottomRightY) ) match = true ;			
+		}		
+		return match;
+	}
+	/**
 	 * get/set width
 	 */  
 	public static function width (el:Element, ?v:Float = null): Float { 
@@ -568,7 +596,8 @@ class ElementExtender  {
 			if (w == null) {
 						if (el.offsetWidth != null) w = el.offsetWidth ; 
 				else 	if (el.scrollWidth != null) w = el.scrollWidth ;
-			}		 
+			}
+			if (w == 0 && el.style.width != "") w = Std.parseFloat(el.style.width) ;	
 			if (w == null) { trace ("f::Element " + el.id + " has not valid width !"); }			
 		}
 		else { el.style.width=Std.string( w) + 'px'; }
@@ -585,9 +614,10 @@ class ElementExtender  {
 			else h = numVal(Std.parseFloat(el.style.height), null) ;				
 			if (h==null) {						
 						if (el.offsetHeight != null)	h = el.offsetHeight ; 
-				else 	if (el.scrollHeight != null)	h = el.scrollHeight ; 
+				else 	if (el.scrollHeight != null)	h = el.scrollHeight ; 				
 			}
-			if (h == null) { trace ("f::Element " + el.id + " has not valid height !"); }		//	
+			if (h == 0 && el.style.height != "") h = Std.parseFloat(el.style.height) ;				
+			if (h == null) { trace ("f::Element " + el.id + " has not valid height !"); }		
 		}
 		else { el.style.height=Std.string( h) + 'px'; }
 		return h;
@@ -732,23 +762,15 @@ class ElementExtender  {
 		return v;
 	}	
 	/**
-	 * get/set 'selected' attribute for OptionElement, ...
+	 * get/set Element's step for InputElement[type="number"]
 	 */
-    public static function selected (e:Element, ?v:Bool = null) : Bool {
+    public static function step (e:Element, ?v:String = null) :String {	
 		var el:Dynamic = e; if (el == null) { trace ("f::Element is null !"); }	
-		var prop1 = "selected" ; var prop2 = "checked" ;  var prop = "selected or checked" ;
-		if (untyped __js__ ("el[prop1]==null && el[prop2]==null ")) trace ("f::Element " + el.id + " has not '" + prop + "' properties !");		
-		var b = (untyped __js__ ("el[prop1]==null"));
-		if (v == null) {
-			if (b)   v = el.checked ; 
-			else v = el.selected ;
-		}
-		else { 
-			if (b) el.checked = v;
-			else  el.selected = v;
-		}
+		var prop = "step" ;  if (untyped __js__ ("el[prop]==null")) trace ("f::Element " + el.id + " has not '" + prop + "' property !");		
+		if (v == null) v=el.step;
+		else el.step = v;	
 		return v;
-	}
+	}	
 	
 	/**
 	 * get/set value for OptionElement, InputElement, TextAreaElement, ...
@@ -823,6 +845,57 @@ class ElementExtender  {
 		return text(el, text(el) + v);
 	}	
 	/**
+	 * get/set 'selected' attribute for OptionElement, ...
+	 */
+    public static function selected (e:Element, ?v:Bool = null) : Bool {
+		var el:Dynamic = e; if (el == null) { trace ("f::Element is null !"); }	
+		var prop1 = "selected" ; var prop2 = "checked" ;  var prop = "selected or checked" ;
+		if (untyped __js__ ("el[prop1]==null && el[prop2]==null ")) trace ("f::Element " + el.id + " has not '" + prop + "' properties !");		
+		var b = (untyped __js__ ("el[prop1]==null"));
+		if (v == null) {
+			if (b)   v = el.checked ; 
+			else v = el.selected ;
+		}
+		else { 
+			if (b) el.checked = v;
+			else  el.selected = v;
+		}
+		return v;
+	}
+	/**
+	 * add a new OptionElement of SelectElement 
+	 */
+     public static function addOption (el:Element) : Element {	
+		 if (!Std.is(el,SelectElement)) trace ("f::Element " + el.id + " isn't SelectElement !");
+		return untyped addChild(el,Browser.document.createElement("option"));
+	 }		
+	/**
+	 * get an OptionElement of SelectElement 
+	 */
+     public static function getOption (el:Element, ?v:Int = 0) : Element {	
+		if (!Std.is(el,SelectElement)) trace ("f::Element " + el.id + " isn't SelectElement !");
+		var sel:SelectElement = untyped el ;
+		if (v<0 || v>sel.options.length-1) trace ("f::Element out of range");
+		return untyped sel.options[v];
+	 }	
+	 public static function getOptions (el:Element) : Array<Element> {	
+		if (!Std.is(el,SelectElement)) trace ("f::Element " + el.id + " isn't SelectElement !");
+		var sel:SelectElement = untyped el ;
+		return untyped sel.options;
+	 }	
+	 public static function getOptionsByValue (el:Element, arrs:Array<String> ) : Array<OptionValue> {	
+		var p = "options" ;  if (untyped __js__ ("el[p]==null")) trace ("f::Element " + el.id + " hasn't '" + p + "' property !");	
+		var sel:SelectElement = untyped el ;
+		var arr:Array<OptionValue> = [];		
+		var len=sel.options.length;
+		for (i in 0...len) {
+			var opt:OptionElement = untyped sel.options[i]; var match = false;
+			for (s in arrs) if (opt.value == s) match=true;
+			if (match) arr.push({text: opt.text,value: opt.value,index: opt.index  }); 
+		}
+		return arr;	
+	 }	
+	/**
 	 * get/set SelectElement value or values if multipla select  ...
 	 */
      public static function getSelectedOptions (el:Element) : Array<OptionValue> {		 
@@ -844,6 +917,14 @@ class ElementExtender  {
 			arr.push({text: opt.text,value: opt.value,index: opt.index  }); 
 		}
 		return arr;	
+	 }	
+	 public static function getSelectedOption (el:Element) : OptionValue {		 
+		var p = "options" ;  if (untyped __js__ ("el[p]==null")) trace ("f::Element " + el.id + " hasn't '" + p + "' property !");	
+		p = "multiple" ;  if (untyped __js__ ("el[p]==null")) trace ("f::Element " + el.id + " hasn't '" + p + "' property !");			 
+		var sel:SelectElement = untyped el ;
+		if (sel.multiple) trace ("f::Element " + el.id + " has multiple selected options !");	
+		return getSelectedOptions (sel)[0] ;
+			
 	 }	
 	/**
 	 * get/set InpuElement placeholder  ...
@@ -892,6 +973,10 @@ class ElementExtender  {
 	}	
 	public static function clearEnterKeyToClick (el:Element) {	
 		Browser.window.onkeypress = null ;		
+	}	
+	public static function setFocus (el:Element) {	
+		if (el == null) { trace ("f::Element is null !"); }	
+		el.focus();	
 	}	
 	/**
 	 * call examples :

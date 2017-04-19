@@ -25,6 +25,7 @@
  */
 package apix.common.util ;
 import apix.common.event.timing.MouseClock;
+import haxe.Json;
 import haxe.Log;
 import haxe.PosInfos;
 //
@@ -111,9 +112,10 @@ class Global {
 	 * <br/><b>v</b> dynamic value.
 	 * <br/><b>return</b> a string.
 	 */
-	public function strVal(s:Dynamic,?defVal:String="") :String {	
+	public function strVal(s:Dynamic, ?defVal:String = "") :String {	
+		if (Std.is(s,Float) && s==0) return "0";
 		if (s==null) return defVal ;
-		if (s=="") return defVal;
+		if (s=="") return defVal;		
 		return Std.string(s);
 	}
 	public function numVal(n:Dynamic,?defVal:Float=0) : Float {
@@ -131,6 +133,11 @@ class Global {
 		if (n == "") return defVal ; 
 		if (Std.is(n,String)) return Std.parseInt(n); 
 		return n ;
+	}
+	public function jsonParseCheck(v:String,?defVal:String="") : String {		
+		try { Json.parse(v) ; }
+		catch (e:Dynamic) { v = defVal ; }
+		return v;
 	}
 	public function isNaN(v:String) : Bool {
 		var i:Dynamic = v;
@@ -298,6 +305,17 @@ class Global {
 		return msg;
 	}
 	*/
+	public function decodeAmp(str:String) :String {
+		str = strVal(str, "");
+		if (str!="") {
+			var i:Int=str.indexOf("~#e") ;
+			while (i>-1) {
+				str=str.substr(0,i)+"&"+str.substr(i+3);
+				i=str.indexOf("~#e") ;
+			}			
+		}
+		return str ;
+	}
 	public function decodeXmlReserved(str:String) :String {
 		// Don't try to replace by &amp; etc... 
 		str = strVal(str, "");
@@ -330,9 +348,7 @@ class Global {
 		}
 		return str ;
 	}
-	/*public function uncodeXmlReserved(str:String) :String {
-		return decodeXmlReserved(str);
-	}*/
+	
 	
 	/**
 	 * @param	os 	source object
@@ -344,7 +360,7 @@ class Global {
 		return o;
 	}
 	public inline function addToObject (os:Dynamic,od:Dynamic) {
-		if (od==null) trace ("f::Impossible to append in null destination object ! ");
+		if (od==null) trace ("f::Impossible to append in undefined object ! ");
 		untyped __js__ ("for (var i in os) { od[i]=os[i] }");
 	}
 	/**

@@ -36,9 +36,6 @@ class Alert  {
 		//
 		defTitleLabel=tTx;
 		defValidLabel = vTx;
-		//titleElem.inner(tTx);
-		//validElem.inner(vTx);
-		//
 		enable();
     }	
 	/**
@@ -62,8 +59,7 @@ class Alert  {
 		Global.alertFunction = display;
 		return this;
 	}
-    
-	/**
+    /**
     *@private
     */
 	
@@ -75,7 +71,7 @@ class Alert  {
 			//callBack = null;
 		}
 	}
-    function display (?v:String = "", ?cb:Dynamic, ?titleLabel:String,?validLabel:String) {		
+    function display (?v:String = "", ?cb:Dynamic, ?titleLabel:String, ?validLabel:String) {		
 		if (Std.is(v, Array)) {
 			var arr:Array<String> = untyped v ;
 			v = "";

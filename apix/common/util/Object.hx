@@ -35,8 +35,9 @@ class Object implements Dynamic {
 			}
 		}
 	}
-	public function set(k:String,?v:Dynamic=null) {
-		Reflect.setField( this,k, v);
+	public function set(k:String,?v:Dynamic=null) : Dynamic{
+		Reflect.setField( this, k, v);
+		return Reflect.field(this, k );
 	}
 	public function get(k:String) : Dynamic {
 		return Reflect.field(this, k );

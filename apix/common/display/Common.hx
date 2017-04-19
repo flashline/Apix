@@ -46,6 +46,8 @@ import apix.common.event.StandardEvent;
 		var HLINE 	= "hr";
 		var OPTION	= "option";
 		var LEGEND	= "legend";
+		var LABEL	= "label";
+		var INPUT	= "input";
 		//to continue if needed
 	}
 	typedef LocalShared = Cookie ;
@@ -205,6 +207,27 @@ class Common {
 			//todo
 		#end
 	}
+	//
+	public static var offsetWidth (get, null): Float ;
+	static inline function get_offsetWidth() : Float {
+		#if (js)
+			return Common.documentElement.offsetWidth ;
+		#else
+			//todo
+		#end
+	}
+	public static var offsetHeight (get, null): Float ;
+	static inline function get_offsetHeight() : Float {
+		#if (js)
+			return Common.documentElement.offsetHeight ;
+		#else
+			//todo
+		#end
+	}
+	
+	
+	
+	//
 	public static var scrollX (get, null): Float ;
 	static inline function get_scrollX () : Float {
 		#if (js)

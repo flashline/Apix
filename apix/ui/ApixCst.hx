@@ -23,12 +23,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package apix.common.util ;
+package apix.ui ;
 
-@:native("getColor") extern class GetColor {
-    // public function new():Void{}
-    public static function toRgb(v:String):String{}
-    public static function toHexa(v:String):String {}
-	public static function decToHexa(v:Float):Float { }	
-	static function test(v:String):String{}
+@:native("apixCst") extern class ApixCst {
+    public static var LANGUAGE_SRC:String;
+    public static var BASE_URL:String ;		
 }
