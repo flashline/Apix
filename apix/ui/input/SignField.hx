@@ -248,7 +248,8 @@ class SignField extends UICompo    {
 		context.lineTo(to.x, to.y);
 		context.stroke();
 		context.closePath();
-		context.restore();		
+		context.stroke();
+		context.restore();
 	}
 	
 	function push (from:Vector,to:Vector) {

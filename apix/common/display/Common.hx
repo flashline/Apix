@@ -35,6 +35,7 @@ import apix.common.event.StandardEvent;
 	import js.html.Node;
 	import js.html.NodeList;
 	import js.Cookie ;
+	import js.html.Location;
 
 	//
 	@:enum
@@ -52,6 +53,7 @@ import apix.common.event.StandardEvent;
 	}
 	typedef LocalShared = Cookie ;
 #end
+
 /**
  * Contains display static methods to abstract language specific methods
  */
@@ -121,8 +123,20 @@ class Common {
 	}
 	public static var document (get, null):#if (js) Document #end;
 	static inline function get_document() : #if (js) Document #end {
-		#if (js)
+		#if (js)  
 			return  Browser.document;
+		#end
+	}	
+	public static var location (get, null):#if (js) Location #end;
+	static inline function get_location() : #if (js) Location #end {
+		#if (js)
+			return Browser.window.location;
+		#end
+	}
+	public static var urlVars (get, null):#if (js) Array<String> #end;
+	static inline function get_urlVars() : #if (js) Array<String> #end {
+		#if (js)
+			return Common.location.search.substring(1).split("&");
 		#end
 	}
 	public static var head (get, null):#if (js) Element #end;

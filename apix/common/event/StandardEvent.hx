@@ -134,6 +134,8 @@ class MouseTouchEvent extends ElemMouseEvent {
 	public static inline  	var TOUCH_MOVE : String = "touchmove";
 	public static inline  	var TOUCH_END : String = "touchend";
 	public static inline  	var TOUCH_CANCEL : String = "touchcancel";
+	public static inline  	var RESIZE : String = "resize";
+	
 	/*
 	public static inline  var MOUSE_DOWN : String = "MSPointerDown";
 	this.element.addEventListener(“MSPointerDown”, eventHandlerName, false);
@@ -144,6 +146,7 @@ class MouseTouchEvent extends ElemMouseEvent {
 	public static inline  var BLUR : String = "blur";
 	public static inline  var INPUT : String = "input";
 	public static inline  var FOCUS : String = "focus";
+	public static inline  var SELECT : String = "select";
 	public static inline  var CONTEXT_MENU : String = "contextmenu";
 	//
 	/**
@@ -169,7 +172,12 @@ class MouseTouchEvent extends ElemMouseEvent {
 	 * @param	v	event type
 	 * @return  true for type which need hand cursor .
 	 */
-	static public function isMouseType(v:String) {for (i in [CLICK,DBL_CLICK, MOUSE_DOWN, MOUSE_OVER] ) { if (i == v) return true; } return false ;}
+	static public function isMouseType(v:String) {
+		for (i in [CLICK, DBL_CLICK, MOUSE_DOWN, MOUSE_OVER] ) {
+			if (i == v) return true ; 
+		} 
+		return false ;		
+	}
 	
 	/**
 	 * use it only if you don't use StandardEvent static var

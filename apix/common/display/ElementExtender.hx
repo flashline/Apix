@@ -88,6 +88,7 @@ typedef ElemStyle = {
 abstract CssStyle (String) { 
 	var textAlign="textAlign";
 	var width="width";
+	var height="height";
 	var minWidth="minWidth";
 	var minHeight = "minHeight";
 	var backgroundColor = "backgroundColor";
@@ -99,6 +100,7 @@ abstract CssStyle (String) {
 	var borderWidth = "borderWidth";
 	var fontSize = "fontSize";
 	var display = "display";
+	var position = "relative";
 	/* to continue
 	var maxWidth="";
 	var maxHeight="";
@@ -483,8 +485,10 @@ class ElementExtender  {
 		else 	if(g.isIE) 		el.style.msTransform = "rotate(" + r + "deg)" ;
 		else 	if(g.isOpera) 	el.style.oTransform = "rotate(" + r + "deg)" ;		
 		else 	if(g.isKhtml) 	el.style.khtmlTransform = "rotate(" + r + "deg)" ;
-		else 					el.style.transform = "rotate(" + r + "deg)" ;		
+		else 					el.style.transform = "rotate(" + r + "deg)" ;	
+		el.rotation = v ;
 	}	
+	
 	/**
 	 * used for loop rotation+=n
 	 */
@@ -684,6 +688,15 @@ class ElementExtender  {
 		return v;
 		
 	}		
+	/* much better */
+	public static function elStyle (el:Element, k:CssStyle, ?v:String = null): String { 
+		if (el == null) { trace ("f::Element is null !"); }	
+		if (untyped __js__ ("el.style[k]==null")) trace ("f::Element " + el.id + " hasn't '" + k + "' style property !");	
+		if (v == null) 	v= 	untyped  __js__ ("el.style[k]");	
+		else 				untyped  __js__ ("el.style[k]=v");	
+		return v;
+		
+	}		
 	public static function enable (el:Element, ?v:Bool, ?useDisabled:Bool = false ): Bool { 
 		var e:Dynamic = el;
 		if (el == null) { trace ("f::Element is null !"); }			
@@ -794,6 +807,16 @@ class ElementExtender  {
 		else el.name = v;	
 		return v;
 	}
+	/**
+	 * get/set 'size' attribute for SelectElement, ...
+	 */
+	 public static function size (el:Element, ?v:Int = null) : Int {	
+		if (!Std.is(el,SelectElement)) trace ("f::Element " + el.id + " isn't SelectElement !");
+		var sel:SelectElement = untyped el ;
+		if (v == null) v = sel.size ;
+		else sel.size = v;	
+		return v;
+	 }
 	/**
 	 * get/set 'title' attribute to show tooltip ...
 	 */
@@ -994,7 +1017,7 @@ class ElementExtender  {
 		var deleguateFunction:EventListener = getLst(srcEvt, listenerFunction, data);
 		var el:Dynamic=untyped srcEvt;if (el.listeners == null) el.listeners = [];
 		el.listeners.push( {type:type, listenerFunction:listenerFunction, deleguateFunction:deleguateFunction } );				
-		srcEvt.addEventListener(type, deleguateFunction, b );
+		srcEvt.addEventListener(type, deleguateFunction, b );		
 	}	
 	/*public static function off (srcEvt:EventTarget, type:String, listenerFunction:Dynamic, ?b:Bool = false)  {		
 		if ( !removeDelegateListener(srcEvt, type, listenerFunction, b) ) {

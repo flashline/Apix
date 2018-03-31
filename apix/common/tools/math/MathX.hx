@@ -144,4 +144,16 @@ class MathX {
 		if (arr.length < len) arr=randomExclusiveList(len, arr);
 		return arr;
 	}
+	/** 
+	 * @param	n	a number >= 0 
+	 * @return 	n!
+	 */
+	static public function factorial (n:Int) : Int {
+		var res:Int;
+		if (n < 0 ) trace("f::error in factoriel() : Input number must be positive  !");
+		if (n == 0) res = n;
+		else if (n > 1) res = n * MathX.factorial(n - 1);
+		else res = 1;
+		return res;
+	}
 }

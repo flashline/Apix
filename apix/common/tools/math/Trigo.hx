@@ -38,6 +38,10 @@ class Trigo  {
 	 */
 	public var alpha(get_alpha,set_alpha):Float;
 	/**
+	 * angle in radian
+	 */
+	public var alphaRad(get_alphaRad,null):Float;
+	/**
 	 * alias of cos
 	 */
 	public var x(get_x,null):Float;
@@ -48,11 +52,11 @@ class Trigo  {
 	/**
 	* cos (x for hypo=1)
 	*/
-	public var cos(get_x,null):Float;
+	public var cos(get,null):Float;
 	/**
 	* sin (y for hypo=1)
 	*/
-	public var sin(get_y,null):Float;
+	public var sin(get,null):Float;
 	/**
 	* (x,y) or (cos,sin) vector
 	*/
@@ -85,6 +89,7 @@ class Trigo  {
 		var degree:Float = radian * 180 / Math.PI ; 
 		return new Trigo(degree);
 	}
+	
 	/**
 	* new Trigo
 	* <br/><b>w</b> width
@@ -145,18 +150,26 @@ class Trigo  {
 		_vector = new Vector(Math.cos(radian), Math.sin(radian)) ;
 		return a ;
 	}
+	function get_alphaRad () :Float {
+		return alpha * Math.PI / 180;
+	}
 	function get_alpha () :Float {
 		return _alpha ;
 	}
 	function get_vector () :Vector {
 		return _vector ;
-	}
-	
+	}	
 	function get_x () : Float {			
 		return vector.x ;
 	}
 	function get_y () :Float {			
 		return vector.y;
+	}
+	function get_sin () : Float {			
+		return vector.y ;
+	}
+	function get_cos () :Float {			
+		return vector.x;
 	}
 	function get_toPercent () :Float {			
 		return MathX.round(heightFromWidth(100),2);

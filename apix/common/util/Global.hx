@@ -96,16 +96,13 @@ class Global {
 	 * <br/><b>return</b> true or false.
 	 */
 	public function boolVal(b:Dynamic,?defVal:Bool=false) :Bool {
-		if (b==null) return defVal ;
-		if (Std.is(b,String)) {
-			if 		(b=="true" ) return true;
-			else if (b=="false") return false;				
-			else  				return defVal ;
-		} else if (Std.is(b,Float)  ) {
-			if 		(b==0) 		return false ;
-			else if (b==1) 		return true ;
-			else  				return defVal ;
-		} else if (Std.is(b,Bool) ) return b ;
+		if 	(b==null) 			return defVal ;
+		else if	(b=="true" ) 	return true;
+		else if  (b=="false") 	return false;
+		else if (b==0) 			return false ;
+		else if  (b==1) 		return true ;
+		else if (b==true) 		return b ;
+		else if  (b==false) 	return b ;
 		return defVal;
 	}
 	/**

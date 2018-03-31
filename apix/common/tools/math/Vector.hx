@@ -35,6 +35,14 @@ class Vector  {
 	/**
 	 * abscissa
 	 */
+	public var xi(get_xi, null):Int;
+    private function get_xi():Int { 		
+    	return Std.int(_x); 
+    }
+	public var yi(get_yi, null):Int;
+    private function get_yi():Int { 		
+    	return Std.int(_y); 
+    }
 	public var x(get_x, set_x):Float;
     private function get_x(): Float { 
     	return _x; 

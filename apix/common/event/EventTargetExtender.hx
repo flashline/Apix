@@ -24,6 +24,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 package apix.common.event ;
+import js.html.Element;
 import js.html.Event;
 import js.html.EventListener;
 import js.html.EventTarget;
@@ -45,6 +46,7 @@ class EventTargetExtender  {
 	 * @param	?data
 	 */
 	public static function on(srcEvt:EventTarget, type:String, listenerFunction:Dynamic, ?b:Bool = false, ?data:Dynamic = null) {
+		if (StandardEvent.isMouseType(type)) handCursor(untyped srcEvt);
 		var deleguateFunction:EventListener = getLst(srcEvt, listenerFunction, data);
 		var el:Dynamic=untyped srcEvt;if (el.listeners == null) el.listeners = [];
 		el.listeners.push( {type:type, listenerFunction:listenerFunction, deleguateFunction:deleguateFunction } );		
@@ -54,8 +56,15 @@ class EventTargetExtender  {
 		if ( !removeDelegateListener(srcEvt, type, listenerFunction, b) ) {
 			// normally no possible
 			srcEvt.removeEventListener(type, listenerFunction, b);
-		}		
+		}	
+		if ( (!hasLst (srcEvt)) && (StandardEvent.isMouseType(type))  ) handCursor(untyped srcEvt, false);		
+	
 	}	
+	public static function handCursor(el:Element, ?v:Bool = true)  { 		
+		var str;
+		if (v) str = "pointer" ; else str = "auto" ;
+		if (el.style!=null && el.style.cursor!=null ) el.style.cursor = str ;
+	}
 	/**
 	 * <b>returns true</b> if at least one listener exists.
 	 */
